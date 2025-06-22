@@ -1,0 +1,95 @@
+{
+    "run": {
+        "task": "image_text_pretrain",
+        "lr_sched": "linear_warmup_cosine_lr",
+        "init_lr": 3e-05,
+        "min_lr": 1e-05,
+        "warmup_lr": 1e-06,
+        "weight_decay": 0.05,
+        "max_epoch": 5,
+        "iters_per_epoch": 500,
+        "num_workers": 4,
+        "warmup_steps": 200,
+        "seed": 42,
+        "output_dir": "output/minigpt4_flickr_finetune",
+        "amp": true,
+        "resume_ckpt_path": null,
+        "evaluate": false,
+        "train_splits": [
+            "train"
+        ],
+        "device": "cuda",
+        "world_size": 7,
+        "dist_url": "env://",
+        "distributed": true,
+        "wandb_log": true,
+        "job_name": "minigpt4_flickr_finetune",
+        "rank": 0,
+        "gpu": 0,
+        "dist_backend": "nccl"
+    },
+    "model": {
+        "arch": "minigpt4",
+        "image_size": 224,
+        "drop_path_rate": 0,
+        "use_grad_checkpoint": false,
+        "vit_precision": "fp16",
+        "freeze_vit": true,
+        "freeze_qformer": true,
+        "num_query_token": 32,
+        "prompt": "",
+        "llama_model": "/mnt/data4/home/ziyuan/MiniGPT4-Finetuning/vicuna-7b",
+        "model_type": "pretrain_vicuna0",
+        "max_txt_len": 300,
+        "end_sym": "###",
+        "prompt_path": "prompts/alignment.txt",
+        "prompt_template": "###Human: {} ###Assistant: ",
+        "ckpt": "/mnt/data4/home/ziyuan/MiniGPT4-Finetuning/prerained_minigpt4_7b.pth"
+    },
+    "preprocess": {
+        "vis_processor": {
+            "train": {
+                "name": "blip2_image_train",
+                "image_size": 224
+            },
+            "eval": {
+                "name": "blip2_image_eval",
+                "image_size": 224
+            }
+        },
+        "text_processor": {
+            "train": {
+                "name": "blip_caption"
+            },
+            "eval": {
+                "name": "blip_caption"
+            }
+        }
+    },
+    "datasets": {
+        "flickr30k_grounded_detail": {
+            "data_type": "images",
+            "build_info": {
+                "ann_path": "/mnt/data4/home/ziyuan/MiniGPT4-Finetuning/flickr30k/flickr30k_grounded_detail.json",
+                "image_path": "/mnt/data4/home/ziyuan/MiniGPT4-Finetuning/flickr30k/flickr30k-images"
+            },
+            "batch_size": 2,
+            "vis_processor": {
+                "train": {
+                    "name": "blip2_image_train",
+                    "image_size": 224
+                }
+            },
+            "text_processor": {
+                "train": {
+                    "name": "blip_caption"
+                }
+            }
+        }
+    }
+}
+{"train_lr": "0.000", "train_loss": "1.733"}
+{"train_lr": "0.000", "train_loss": "1.620"}
+{"train_lr": "0.000", "train_loss": "1.604"}
+{"train_lr": "0.000", "train_loss": "1.601"}
+{"train_lr": "0.000", "train_loss": "1.576"}
